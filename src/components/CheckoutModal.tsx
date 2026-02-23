@@ -103,7 +103,7 @@ const CheckoutModal = ({ onClose }: { onClose: () => void }) => {
             type="submit"
             className="w-full bg-primary text-primary-foreground py-3 rounded-md font-body font-bold uppercase tracking-wider text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2"
           >
-            📲 Send Order via WhatsApp
+            Send Order via WhatsApp
           </button>
         </form>
       </div>

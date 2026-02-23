@@ -6,6 +6,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Services from "@/components/ServicesSection";
+import Contact from "./pages/Contact";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +22,29 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+
+            <Route
+              path="services"
+              element={
+                <>
+                  <Header />
+                  <Services />
+                  <Footer />
+                </>
+              }
+            />
+
+            <Route
+              path="contact"
+              element={
+                <>
+                  <Header />
+                  <Contact />
+                  <Footer />
+                </>
+              }
+            />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

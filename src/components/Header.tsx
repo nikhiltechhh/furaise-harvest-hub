@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
-import { ShoppingCart, Phone, Mail, Menu, Search, X } from "lucide-react";
+import { ShoppingCart, Phone, Mail } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
+  { label: "Services", href: "/services" },
   { label: "Products", href: "#products" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { totalItems, setIsCartOpen } = useCart();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -21,18 +24,46 @@ const Header = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const scrollToSection = (href: string) => {
+    const el = document.querySelector(href);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+
+    // Section link (#home, #about, #products)
+    if (href.startsWith("#")) {
+      // If already on homepage
+      if (location.pathname === "/") {
+        scrollToSection(href);
+      } else {
+        // Go to homepage first, then scroll
+        navigate("/", { replace: false });
+
+        // Wait for page render
+        setTimeout(() => {
+          scrollToSection(href);
+        }, 100);
+      }
+    } 
+    // Route link (/services, /contact)
+    else {
+      navigate(href);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Top bar - contact info */}
+      {/* Top bar */}
       <div
         className={`bg-foreground/95 text-background transition-all duration-300 ${
-          scrolled ? "py-0 max-h-0 overflow-hidden opacity-0" : "py-1.5 max-h-12 opacity-100"
+          scrolled
+            ? "py-0 max-h-0 overflow-hidden opacity-0"
+            : "py-1.5 max-h-12 opacity-100"
         }`}
       >
         <div className="container mx-auto px-4 flex items-center justify-end gap-6 text-xs font-body">
@@ -51,7 +82,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Main nav bar */}
+      {/* Main nav */}
       <div
         className={`transition-all duration-300 ${
           scrolled ? "bg-primary shadow-lg py-2" : "bg-primary/95 py-3"
@@ -63,12 +94,22 @@ const Header = () => {
             onClick={() => handleNavClick("#home")}
             className="flex items-center gap-2 cursor-pointer flex-shrink-0"
           >
-            <span className="font-heading text-2xl md:text-3xl font-bold tracking-wide text-primary-foreground">
-              FURAISE
-            </span>
+            <button
+  onClick={() => handleNavClick("#home")}
+  className="flex items-center cursor-pointer flex-shrink-0"
+>
+  <img
+    src="https://i.ibb.co/cKtx9PTC/logofuraise.jpg"
+    alt="Furaise Logo"
+    className={`
+      w-auto object-contain transition-all duration-300
+      ${scrolled ? "h-7 md:h-18" : "h-9 md:h-16"}
+    `}
+  />
+</button>
           </button>
 
-          {/* Nav links - desktop */}
+          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
               <button
@@ -81,25 +122,8 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Search + Cart + Hamburger */}
+          {/* Cart + Hamburger */}
           <div className="flex items-center gap-3">
-            {/* Search - desktop */}
-            <button
-              onClick={() => {
-                const el = document.querySelector("#products");
-                el?.scrollIntoView({ behavior: "smooth" });
-                setTimeout(() => {
-                  const input = document.querySelector<HTMLInputElement>("#product-search");
-                  input?.focus();
-                }, 600);
-              }}
-              className="hidden sm:flex items-center gap-2 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground/80 rounded-full px-3 py-1.5 transition-colors cursor-pointer"
-            >
-              <Search className="w-3.5 h-3.5" />
-              <span className="font-body text-xs tracking-wide">Search</span>
-            </button>
-
-            {/* Cart */}
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative text-primary-foreground hover:text-secondary transition-colors"
@@ -113,7 +137,6 @@ const Header = () => {
               )}
             </button>
 
-            {/* Hamburger */}
             <button
               className="md:hidden flex flex-col gap-[6px] w-7 p-0"
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -155,21 +178,7 @@ const Header = () => {
               {link.label}
             </button>
           ))}
-          {/* Mobile search */}
-          <button
-            onClick={() => {
-              setMobileOpen(false);
-              const el = document.querySelector("#products");
-              el?.scrollIntoView({ behavior: "smooth" });
-              setTimeout(() => {
-                const input = document.querySelector<HTMLInputElement>("#product-search");
-                input?.focus();
-              }, 600);
-            }}
-            className="flex items-center gap-2 text-primary-foreground/80 font-body text-base tracking-wider uppercase text-left"
-          >
-            <Search className="w-4 h-4" /> Search Products
-          </button>
+
           <div className="flex flex-col gap-2 pt-2 border-t border-primary-foreground/20 text-primary-foreground/80 text-sm">
             <a href="tel:7842213679" className="flex items-center gap-2">
               <Phone className="w-4 h-4" /> 7842213679
