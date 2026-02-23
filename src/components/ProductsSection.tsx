@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { products, type Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Search } from "lucide-react";
 import ProductDetail from "./ProductDetail";
 
 const ProductCard = ({ product }: { product: Product }) => {
@@ -93,7 +93,11 @@ const ProductCard = ({ product }: { product: Product }) => {
 
 const ProductsSection = () => {
   const [filter, setFilter] = useState<"all" | "turmeric" | "rice">("all");
-  const filtered = filter === "all" ? products : products.filter((p) => p.category === filter);
+  const [search, setSearch] = useState("");
+  
+  const filtered = products
+    .filter((p) => filter === "all" || p.category === filter)
+    .filter((p) => search.trim() === "" || p.name.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <section id="products" className="py-20 md:py-28 bg-muted">
@@ -104,6 +108,21 @@ const ProductsSection = () => {
         <p className="text-center font-body text-muted-foreground mb-10 max-w-2xl mx-auto">
           Premium turmeric & rice — FOB pricing, minimum order 10 MTN
         </p>
+
+        {/* Search bar */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              id="product-search"
+              type="text"
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-full border border-border bg-card font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+            />
+          </div>
+        </div>
 
         {/* Filter */}
         <div className="flex justify-center gap-3 mb-12">
@@ -126,6 +145,11 @@ const ProductsSection = () => {
           {filtered.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
+          {filtered.length === 0 && (
+            <div className="col-span-full text-center py-12">
+              <p className="font-body text-muted-foreground">No products found matching your search.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
