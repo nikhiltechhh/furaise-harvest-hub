@@ -1,11 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-import  Video from "@/assets/furaise.mp4";
+import Video from "@/assets/furaise.mp4";
 
 // ─── CONFIGURATION ─────────────────────────────────────────────────────────────
-// Replace these values with your actual video details
 const VIDEO_CONFIG = {
-  src: Video,        // path to your video file
-  poster: "/images/your-poster.jpg",    // thumbnail shown before play (optional)
+  src: Video,
+  poster: "/images/your-poster.jpg",
   title: "From Indian Farms to Global Markets",
   subtitle:
     "Watch how we bring the finest turmeric and rice from source to shipment — with full traceability and zero compromise on quality.",
@@ -166,8 +165,8 @@ const VideoSection = () => {
             transition: "opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s",
           }}
         >
-          {/* Decorative frame wrapper with gold corners */}
-          <div className="relative max-w-5xl mx-auto">
+          {/* Reel-size wrapper — centered, max-width matches 9:16 portrait */}
+          <div className="relative mx-auto" style={{ maxWidth: "360px" }}>
 
             {/* Gold corner accents */}
             {[
@@ -188,11 +187,11 @@ const VideoSection = () => {
               />
             ))}
 
-            {/* Player */}
+            {/* Player — 9:16 Instagram Reel ratio */}
             <div
               ref={playerRef}
               className="relative w-full bg-black rounded-sm overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.18)]"
-              style={{ aspectRatio: "16/9", cursor: "none" }}
+              style={{ aspectRatio: "9/16", cursor: "none" }}
               onMouseMove={showControls}
               onMouseLeave={() => playing && setControlsVisible(false)}
               onClick={togglePlay}
@@ -290,19 +289,11 @@ const VideoSection = () => {
                     aria-label={playing ? "Pause" : "Play"}
                   >
                     {playing ? (
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                       </svg>
                     ) : (
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
                       </svg>
                     )}
@@ -315,19 +306,11 @@ const VideoSection = () => {
                     aria-label={muted ? "Unmute" : "Mute"}
                   >
                     {muted ? (
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M16.5 12A4.5 4.5 0 0014 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0017.73 18L19 19.27 20.27 18 5.54 3.27 4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
                       </svg>
                     ) : (
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
                       </svg>
                     )}
@@ -337,10 +320,7 @@ const VideoSection = () => {
                   <span className="text-white/60 text-xs font-body tabular-nums ml-1">
                     {formatTime(currentTime)}
                     {duration > 0 && (
-                      <span className="text-white/30">
-                        {" "}
-                        / {formatTime(duration)}
-                      </span>
+                      <span className="text-white/30"> / {formatTime(duration)}</span>
                     )}
                   </span>
 
@@ -353,19 +333,11 @@ const VideoSection = () => {
                     aria-label="Toggle fullscreen"
                   >
                     {isFullscreen ? (
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
                       </svg>
                     ) : (
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
                       </svg>
                     )}
